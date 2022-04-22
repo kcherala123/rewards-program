@@ -22,25 +22,25 @@ function calculateResults(incomingData) {
     return { ...transaction, points, month };
   });
 
-  let byCustomer = {};
-  let totalPointsByCustomer = {};
+  let byEachCustomer = {};
+  let totalRewardPoints = {};
   pointsPerTransaction.forEach(pointsPerTransaction => {
     let { cusId, name, month, points } = pointsPerTransaction;
-    if (!byCustomer[cusId]) {
-      byCustomer[cusId] = [];
+    if (!byEachCustomer[cusId]) {
+      byEachCustomer[cusId] = [];
     }
-    if (!totalPointsByCustomer[cusId]) {
-      totalPointsByCustomer[name] = 0;
+    if (!totalRewardPoints[cusId]) {
+      totalRewardPoints[name] = 0;
     }
-    totalPointsByCustomer[name] += points;
-    if (byCustomer[cusId][month]) {
-      byCustomer[cusId][month].points += points;
-      byCustomer[cusId][month].monthNumber = month;
-      byCustomer[cusId][month].numTransactions++;
+    totalRewardPoints[name] += points;
+    if (byEachCustomer[cusId][month]) {
+      byEachCustomer[cusId][month].points += points;
+      byEachCustomer[cusId][month].monthNumber = month;
+      byEachCustomer[cusId][month].numTransactions++;
     }
     else {
 
-      byCustomer[cusId][month] = {
+      byEachCustomer[cusId][month] = {
         cusId,
         name,
         monthNumber: month,
@@ -50,16 +50,16 @@ function calculateResults(incomingData) {
       }
     }
   });
-  let tot = [];
-  for (var custKey in byCustomer) {
-    byCustomer[custKey].forEach(cRow => {
-      tot.push(cRow);
+  let totalPointsForEachMonth = [];
+  for (var custKey in byEachCustomer) {
+    byEachCustomer[custKey].forEach(cRow => {
+      totalPointsForEachMonth.push(cRow);
     });
   }
-  console.log("byCustomer", byCustomer);
-  console.log("tot", tot);
+  console.log("byEachCustomer", byEachCustomer);
+  console.log("total points", totalPointsForEachMonth);
   return {
-    summaryByCustomer: tot,
+    summaryByCustomer: totalPointsForEachMonth,
     pointsPerTransaction
   };
 }
@@ -83,7 +83,6 @@ function App() {
     <div>Loading...</div>
     :
     <div>
-
       <div className="container">
         <div className="row">
           <div className="col-10">
@@ -107,7 +106,6 @@ function App() {
                       <td>{val.transactionDt}</td>
                       <td>{val.amt}</td>
                       <td>{val.points}</td>
-
                     </tr>
                   )
                 })}
@@ -116,7 +114,6 @@ function App() {
           </div>
         </div>
       </div>
-
       <div className="container">
         <div className="row">
           <div className="col-10">
@@ -138,7 +135,6 @@ function App() {
                       <td>{val.name}</td>
                       <td>{val.month}</td>
                       <td>{val.points}</td>
-
                     </tr>
                   )
                 })}
